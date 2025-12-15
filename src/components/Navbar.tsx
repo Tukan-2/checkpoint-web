@@ -9,6 +9,7 @@ const Navbar = () => {
     { name: "Služby", href: "#sluzby" },
     { name: "O nás", href: "#o-nas" },
     { name: "Ceník", href: "#cenik" },
+    { name: "Rezervace", href: "#rezervace" },
     { name: "Kontakt", href: "#kontakt" },
   ];
 
@@ -45,8 +46,8 @@ const Navbar = () => {
               <Phone className="w-4 h-4" />
               <span className="font-semibold">+420 123 456 789</span>
             </a>
-            <Button variant="accent" size="default">
-              Objednat se
+            <Button variant="accent" size="default" asChild>
+              <a href="#rezervace">Objednat se</a>
             </Button>
           </div>
 
@@ -77,8 +78,8 @@ const Navbar = () => {
                 <Phone className="w-4 h-4" />
                 <span className="font-semibold">+420 123 456 789</span>
               </a>
-              <Button variant="accent" className="w-full">
-                Objednat se
+              <Button variant="accent" className="w-full" asChild>
+                <a href="#rezervace" onClick={() => setIsOpen(false)}>Objednat se</a>
               </Button>
             </div>
           </div>
