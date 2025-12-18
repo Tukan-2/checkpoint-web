@@ -14,7 +14,216 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          booking_date: string
+          booking_time: string
+          branch_id: string
+          created_at: string | null
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id: string
+          license_plate: string | null
+          notes: string | null
+          service_name: string
+          status: string | null
+          vehicle_group_id: string
+        }
+        Insert: {
+          booking_date: string
+          booking_time: string
+          branch_id: string
+          created_at?: string | null
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id?: string
+          license_plate?: string | null
+          notes?: string | null
+          service_name: string
+          status?: string | null
+          vehicle_group_id: string
+        }
+        Update: {
+          booking_date?: string
+          booking_time?: string
+          branch_id?: string
+          created_at?: string | null
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          id?: string
+          license_plate?: string | null
+          notes?: string | null
+          service_name?: string
+          status?: string | null
+          vehicle_group_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_vehicle_group_id_fkey"
+            columns: ["vehicle_group_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      branch_prices: {
+        Row: {
+          branch_id: string
+          description: string | null
+          id: string
+          price: number
+          service_name: string
+          vehicle_group_id: string
+        }
+        Insert: {
+          branch_id: string
+          description?: string | null
+          id?: string
+          price: number
+          service_name: string
+          vehicle_group_id: string
+        }
+        Update: {
+          branch_id?: string
+          description?: string | null
+          id?: string
+          price?: number
+          service_name?: string
+          vehicle_group_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "branch_prices_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "branch_prices_vehicle_group_id_fkey"
+            columns: ["vehicle_group_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      branch_vehicle_groups: {
+        Row: {
+          branch_id: string
+          id: string
+          vehicle_group_id: string
+        }
+        Insert: {
+          branch_id: string
+          id?: string
+          vehicle_group_id: string
+        }
+        Update: {
+          branch_id?: string
+          id?: string
+          vehicle_group_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "branch_vehicle_groups_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "branch_vehicle_groups_vehicle_group_id_fkey"
+            columns: ["vehicle_group_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      branches: {
+        Row: {
+          address: string
+          city: string
+          created_at: string | null
+          description: string | null
+          email: string | null
+          id: string
+          is_active: boolean | null
+          map_embed_url: string | null
+          name: string
+          opening_hours: Json | null
+          phone: string | null
+          postal_code: string | null
+          slug: string
+          updated_at: string | null
+        }
+        Insert: {
+          address: string
+          city: string
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          map_embed_url?: string | null
+          name: string
+          opening_hours?: Json | null
+          phone?: string | null
+          postal_code?: string | null
+          slug: string
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string
+          city?: string
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          map_embed_url?: string | null
+          name?: string
+          opening_hours?: Json | null
+          phone?: string | null
+          postal_code?: string | null
+          slug?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      vehicle_groups: {
+        Row: {
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
