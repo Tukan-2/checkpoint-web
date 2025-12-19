@@ -73,7 +73,7 @@ const BranchDetail = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from("bookings").insert({
+      const { data: bookingData, error } = await supabase.from("bookings").insert({
         branch_id: branch.id,
         vehicle_group_id: selectedVehicleGroup,
         service_name: selectedService,
@@ -84,14 +84,37 @@ const BranchDetail = () => {
         booking_date: format(selectedDate, "yyyy-MM-dd"),
         booking_time: selectedTime,
         notes: formData.notes || null,
-      });
+      }).select().single();
 
       if (error) throw error;
+
+      // Send email notification
+      try {
+        await supabase.functions.invoke("send-booking-notification", {
+          body: {
+            bookingId: bookingData.id,
+            customerName: formData.name,
+            customerEmail: formData.email,
+            customerPhone: formData.phone,
+            serviceName: selectedService,
+            bookingDate: format(selectedDate, "yyyy-MM-dd"),
+            bookingTime: selectedTime,
+            branchName: branch.name,
+            branchAddress: `${branch.address}, ${branch.postal_code} ${branch.city}`,
+            licensePlate: formData.licensePlate || undefined,
+            notes: formData.notes || undefined,
+          },
+        });
+        console.log("Booking notification email sent");
+      } catch (emailError) {
+        console.error("Failed to send notification email:", emailError);
+        // Don't fail the booking if email fails
+      }
 
       setIsSubmitted(true);
       toast({
         title: "Rezervace odeslána!",
-        description: "Brzy vás budeme kontaktovat.",
+        description: "Potvrzení jsme vám zaslali na email.",
       });
     } catch (error) {
       console.error(error);
