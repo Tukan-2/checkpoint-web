@@ -10,6 +10,7 @@ const corsHeaders = {
 
 interface BookingNotificationRequest {
   bookingId: string;
+  cancellationToken: string;
   customerName: string;
   customerEmail: string;
   customerPhone: string;
@@ -33,6 +34,7 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const {
       bookingId,
+      cancellationToken,
       customerName,
       customerEmail,
       customerPhone,
@@ -55,6 +57,10 @@ const handler = async (req: Request): Promise<Response> => {
       day: 'numeric'
     });
 
+    // Get the app URL from request origin or use default
+    const origin = req.headers.get("origin") || "https://lpfghgcmbcvmusyovhej.lovableproject.com";
+    const cancellationUrl = `${origin}/zrusit-rezervaci?token=${cancellationToken}`;
+
     const htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -69,6 +75,8 @@ const handler = async (req: Request): Promise<Response> => {
           .detail-row { padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
           .detail-label { font-weight: bold; color: #4a5568; }
           .footer { background: #edf2f7; padding: 15px; text-align: center; font-size: 12px; color: #718096; border-radius: 0 0 8px 8px; }
+          .cancel-section { margin-top: 20px; padding: 15px; background: #fff5f5; border: 1px solid #fed7d7; border-radius: 8px; }
+          .cancel-link { color: #c53030; text-decoration: underline; }
           h1 { margin: 0; font-size: 24px; }
           h2 { color: #2d3748; margin-top: 0; }
         </style>
@@ -117,7 +125,12 @@ const handler = async (req: Request): Promise<Response> => {
               <li>Platný občanský průkaz</li>
             </ul>
             
-            <p>V případě potřeby změny nebo zrušení rezervace nás prosím kontaktujte.</p>
+            <div class="cancel-section">
+              <p style="margin: 0;"><strong>Potřebujete rezervaci zrušit?</strong></p>
+              <p style="margin: 5px 0 0 0;">
+                <a href="${cancellationUrl}" class="cancel-link">Klikněte zde pro zrušení rezervace</a>
+              </p>
+            </div>
           </div>
           <div class="footer">
             <p>Tento email byl automaticky vygenerován. Neodpovídejte na něj.</p>

@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Branches from "./pages/Branches";
 import BranchDetail from "./pages/BranchDetail";
+import CancelBooking from "./pages/CancelBooking";
 import Auth from "./pages/Auth";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/pobocky" element={<Branches />} />
           <Route path="/pobocky/:slug" element={<BranchDetail />} />
+          <Route path="/zrusit-rezervaci" element={<CancelBooking />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
