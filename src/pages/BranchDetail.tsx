@@ -93,6 +93,7 @@ const BranchDetail = () => {
         await supabase.functions.invoke("send-booking-notification", {
           body: {
             bookingId: bookingData.id,
+            cancellationToken: bookingData.cancellation_token,
             customerName: formData.name,
             customerEmail: formData.email,
             customerPhone: formData.phone,
