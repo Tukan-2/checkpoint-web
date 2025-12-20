@@ -23,6 +23,18 @@ interface BookingNotificationRequest {
   notes?: string;
 }
 
+// HTML escape function to prevent XSS
+function escapeHtml(text: string): string {
+  const htmlEntities: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  };
+  return text.replace(/[&<>"']/g, (char) => htmlEntities[char] || char);
+}
+
 const handler = async (req: Request): Promise<Response> => {
   console.log("Received request to send booking notification");
 
@@ -46,6 +58,14 @@ const handler = async (req: Request): Promise<Response> => {
       licensePlate,
       notes,
     }: BookingNotificationRequest = await req.json();
+
+    // Sanitize all user inputs to prevent XSS
+    const safeCustomerName = escapeHtml(customerName || '');
+    const safeServiceName = escapeHtml(serviceName || '');
+    const safeBranchName = escapeHtml(branchName || '');
+    const safeBranchAddress = escapeHtml(branchAddress || '');
+    const safeLicensePlate = licensePlate ? escapeHtml(licensePlate) : '';
+    const safeNotes = notes ? escapeHtml(notes) : '';
 
     console.log(`Sending booking confirmation to ${customerEmail} for booking ${bookingId}`);
 
@@ -87,12 +107,12 @@ const handler = async (req: Request): Promise<Response> => {
             <h1>✓ Rezervace přijata</h1>
           </div>
           <div class="content">
-            <h2>Dobrý den, ${customerName}!</h2>
+            <h2>Dobrý den, ${safeCustomerName}!</h2>
             <p>Vaše rezervace byla úspěšně přijata. Níže najdete podrobnosti:</p>
             
             <div class="details">
               <div class="detail-row">
-                <span class="detail-label">Služba:</span> ${serviceName}
+                <span class="detail-label">Služba:</span> ${safeServiceName}
               </div>
               <div class="detail-row">
                 <span class="detail-label">Datum:</span> ${formattedDate}
@@ -101,19 +121,19 @@ const handler = async (req: Request): Promise<Response> => {
                 <span class="detail-label">Čas:</span> ${bookingTime}
               </div>
               <div class="detail-row">
-                <span class="detail-label">Pobočka:</span> ${branchName}
+                <span class="detail-label">Pobočka:</span> ${safeBranchName}
               </div>
               <div class="detail-row">
-                <span class="detail-label">Adresa:</span> ${branchAddress}
+                <span class="detail-label">Adresa:</span> ${safeBranchAddress}
               </div>
-              ${licensePlate ? `
+              ${safeLicensePlate ? `
               <div class="detail-row">
-                <span class="detail-label">SPZ:</span> ${licensePlate}
+                <span class="detail-label">SPZ:</span> ${safeLicensePlate}
               </div>
               ` : ''}
-              ${notes ? `
+              ${safeNotes ? `
               <div class="detail-row">
-                <span class="detail-label">Poznámky:</span> ${notes}
+                <span class="detail-label">Poznámky:</span> ${safeNotes}
               </div>
               ` : ''}
             </div>
