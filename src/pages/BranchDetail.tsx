@@ -267,8 +267,8 @@ const BranchDetail = () => {
                 </div>
               )}
 
-              {/* Prices */}
-              {prices && prices.length > 0 && (
+              {/* Prices - zakomentováno, zatím nepoužívat */}
+              {/* {prices && prices.length > 0 && (
                 <div className="bg-card rounded-2xl p-6 border border-border">
                   <h2 className="text-xl font-display text-foreground mb-4">Ceník</h2>
                   
@@ -293,7 +293,7 @@ const BranchDetail = () => {
                     })}
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* Right Column - Booking Form */}
