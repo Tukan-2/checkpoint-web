@@ -1,6 +1,7 @@
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Standard function component
 const ContactSection = () => {
   return (
     <section id="kontakt" className="py-20 lg:py-28 bg-secondary/50">

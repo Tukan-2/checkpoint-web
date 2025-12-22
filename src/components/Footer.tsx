@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 
+// Standard function component
 const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">

@@ -6,6 +6,7 @@ import { useBranches } from "@/hooks/useBranches";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+// Branches page component
 const Branches = () => {
   const { data: branches, isLoading } = useBranches();
   const [search, setSearch] = useState("");
