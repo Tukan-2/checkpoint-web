@@ -1,9 +1,10 @@
+import { forwardRef } from "react";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const ContactSection = () => {
+const ContactSection = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <section id="kontakt" className="py-20 lg:py-28 bg-secondary/50">
+    <section ref={ref} id="kontakt" className="py-20 lg:py-28 bg-secondary/50">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -109,6 +110,8 @@ const ContactSection = () => {
       </div>
     </section>
   );
-};
+});
+
+ContactSection.displayName = "ContactSection";
 
 export default ContactSection;
