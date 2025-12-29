@@ -360,18 +360,21 @@ export type Database = {
         Row: {
           description: string | null
           icon: string | null
+          icon_url: string | null
           id: string
           name: string
         }
         Insert: {
           description?: string | null
           icon?: string | null
+          icon_url?: string | null
           id?: string
           name: string
         }
         Update: {
           description?: string | null
           icon?: string | null
+          icon_url?: string | null
           id?: string
           name?: string
         }

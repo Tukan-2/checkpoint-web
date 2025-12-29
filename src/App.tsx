@@ -13,6 +13,10 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminBranches from "./pages/admin/AdminBranches";
 import AdminPrices from "./pages/admin/AdminPrices";
 import AdminBookings from "./pages/admin/AdminBookings";
+import AdminContent from "./pages/admin/AdminContent";
+import AdminMenu from "./pages/admin/AdminMenu";
+import AdminSettings from "./pages/admin/AdminSettings";
+import AdminVehicleGroups from "./pages/admin/AdminVehicleGroups";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,8 +36,12 @@ const App = () => (
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="branches" element={<AdminBranches />} />
+            <Route path="vehicle-groups" element={<AdminVehicleGroups />} />
             <Route path="prices" element={<AdminPrices />} />
             <Route path="bookings" element={<AdminBookings />} />
+            <Route path="content" element={<AdminContent />} />
+            <Route path="menu" element={<AdminMenu />} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
