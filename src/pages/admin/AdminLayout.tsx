@@ -1,14 +1,18 @@
 import { useEffect } from "react";
 import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
-import { Building2, DollarSign, CalendarDays, LogOut, Home, Users } from "lucide-react";
+import { Building2, DollarSign, CalendarDays, LogOut, Home, FileText, Menu, Settings, Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
 const navItems = [
   { name: "Pobočky", href: "/admin/branches", icon: Building2 },
+  { name: "Kategorie vozidel", href: "/admin/vehicle-groups", icon: Car },
   { name: "Ceník", href: "/admin/prices", icon: DollarSign },
   { name: "Rezervace", href: "/admin/bookings", icon: CalendarDays },
+  { name: "Obsah webu", href: "/admin/content", icon: FileText },
+  { name: "Menu", href: "/admin/menu", icon: Menu },
+  { name: "Nastavení", href: "/admin/settings", icon: Settings },
 ];
 
 const AdminLayout = () => {
