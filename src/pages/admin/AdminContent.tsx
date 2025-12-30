@@ -46,9 +46,11 @@ const sections = [
   { value: "hero", label: "Úvodní sekce (Hero)" },
   { value: "about", label: "O nás" },
   { value: "services", label: "Služby" },
+  { value: "statistics", label: "Statistiky" },
+  { value: "benefits", label: "Benefity / Proč my" },
+  { value: "pricing", label: "Ceník" },
   { value: "contact", label: "Kontakt" },
   { value: "footer", label: "Patička" },
-  { value: "pricing", label: "Ceník" },
 ];
 
 const AdminContent = () => {
