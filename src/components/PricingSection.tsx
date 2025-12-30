@@ -1,7 +1,9 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAllSiteContent, getContent } from "@/hooks/useSiteContent";
+import { useSiteSettings, isSettingEnabled } from "@/hooks/useSiteSettings";
 
-const pricingItems = [
+const defaultPricingItems = [
   {
     title: "STK osobní vozidlo",
     price: "800",
@@ -26,23 +28,42 @@ const pricingItems = [
 ];
 
 const PricingSection = () => {
+  const { data: content } = useAllSiteContent();
+  const { data: settings } = useSiteSettings();
+
+  // Check if pricing is visible
+  const pricesVisible = isSettingEnabled(settings, "prices_visible", true);
+
+  // If prices are hidden, don't render the section at all
+  if (!pricesVisible) {
+    return null;
+  }
+
+  // Get section header from CMS
+  const sectionLabel = getContent(content, "pricing", "section_label", "content", "Ceník");
+  const sectionTitle = getContent(content, "pricing", "section_title", "title", "Transparentní ceny");
+  const sectionDescription = getContent(content, "pricing", "section_description", "content", 
+    "Žádné skryté poplatky. Ceny jsou konečné a platíte pouze za skutečně provedené služby.");
+  const sectionNote = getContent(content, "pricing", "section_note", "content",
+    "* Ceny jsou orientační. Konečná cena závisí na typu a kategorii vozidla.");
+
   return (
     <section id="cenik" className="py-20 lg:py-28 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-accent font-semibold uppercase tracking-wider text-sm">Ceník</span>
+          <span className="text-accent font-semibold uppercase tracking-wider text-sm">{sectionLabel}</span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display text-foreground mt-2 mb-4">
-            Transparentní ceny
+            {sectionTitle}
           </h2>
           <p className="text-muted-foreground text-lg">
-            Žádné skryté poplatky. Ceny jsou konečné a platíte pouze za skutečně provedené služby.
+            {sectionDescription}
           </p>
         </div>
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {pricingItems.map((item) => (
+          {defaultPricingItems.map((item) => (
             <div
               key={item.title}
               className={`relative bg-card rounded-2xl p-6 lg:p-8 card-elevated border transition-all duration-300 ${
@@ -86,7 +107,7 @@ const PricingSection = () => {
 
         {/* Note */}
         <p className="text-center text-muted-foreground text-sm mt-8">
-          * Ceny jsou orientační. Konečná cena závisí na typu a kategorii vozidla.
+          {sectionNote}
         </p>
       </div>
     </section>
