@@ -12,29 +12,36 @@ export const useAuth = () => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log("Auth state changed:", event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
-        setLoading(false);
 
         // Defer admin check with setTimeout to prevent deadlock
         if (session?.user) {
           setTimeout(() => {
-            checkAdminRole(session.user.id);
+            checkAdminRole(session.user.id).finally(() => {
+              setLoading(false);
+            });
           }, 0);
         } else {
           setIsAdmin(false);
+          setLoading(false);
         }
       }
     );
 
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("Got session:", session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
 
       if (session?.user) {
-        checkAdminRole(session.user.id);
+        checkAdminRole(session.user.id).finally(() => {
+          setLoading(false);
+        });
+      } else {
+        setLoading(false);
       }
     });
 
