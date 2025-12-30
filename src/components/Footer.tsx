@@ -1,12 +1,16 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useAllSiteContent, getContent } from "@/hooks/useSiteContent";
+import { useSiteSettings, getSetting } from "@/hooks/useSiteSettings";
 
 const Footer = () => {
   const { data: content } = useAllSiteContent();
+  const { data: settings } = useSiteSettings();
 
   const copyright = getContent(content, "footer", "copyright", "content", 
     `© ${new Date().getFullYear()} STK AutoKontrol. Všechna práva vyhrazena.`
   );
+  const phone = getSetting(settings, "contact_phone", "+420 123 456 789");
+  const email = getSetting(settings, "contact_email", "info@stk-autokontrol.cz");
 
   return (
     <footer className="bg-primary text-primary-foreground">
@@ -74,14 +78,14 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-accent flex-shrink-0" />
-                <a href="tel:+420123456789" className="text-primary-foreground/70 hover:text-primary-foreground text-sm">
-                  +420 123 456 789
+                <a href={`tel:${phone.replace(/\s/g, "")}`} className="text-primary-foreground/70 hover:text-primary-foreground text-sm">
+                  {phone}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-accent flex-shrink-0" />
-                <a href="mailto:info@stk-autokontrol.cz" className="text-primary-foreground/70 hover:text-primary-foreground text-sm">
-                  info@stk-autokontrol.cz
+                <a href={`mailto:${email}`} className="text-primary-foreground/70 hover:text-primary-foreground text-sm">
+                  {email}
                 </a>
               </li>
             </ul>

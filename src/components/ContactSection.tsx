@@ -1,11 +1,15 @@
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAllSiteContent, getContent } from "@/hooks/useSiteContent";
+import { useSiteSettings, getSetting } from "@/hooks/useSiteSettings";
 
 const ContactSection = () => {
   const { data: content } = useAllSiteContent();
+  const { data: settings } = useSiteSettings();
 
   const title = getContent(content, "contact", "title", "content", "Kde nás najdete");
+  const phone = getSetting(settings, "contact_phone", "+420 123 456 789");
+  const email = getSetting(settings, "contact_email", "info@stk-autokontrol.cz");
 
   return (
     <section id="kontakt" className="py-20 lg:py-28 bg-secondary/50">
@@ -44,8 +48,8 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h3 className="font-display text-lg text-foreground mb-1">Telefon</h3>
-                  <a href="tel:+420123456789" className="text-accent hover:text-accent/80 font-semibold text-lg">
-                    +420 123 456 789
+                  <a href={`tel:${phone.replace(/\s/g, "")}`} className="text-accent hover:text-accent/80 font-semibold text-lg">
+                    {phone}
                   </a>
                   <p className="text-muted-foreground text-sm mt-1">Volejte v otevírací době</p>
                 </div>
@@ -59,8 +63,8 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h3 className="font-display text-lg text-foreground mb-1">E-mail</h3>
-                  <a href="mailto:info@stk-autokontrol.cz" className="text-accent hover:text-accent/80 font-semibold">
-                    info@stk-autokontrol.cz
+                  <a href={`mailto:${email}`} className="text-accent hover:text-accent/80 font-semibold">
+                    {email}
                   </a>
                   <p className="text-muted-foreground text-sm mt-1">Odpovíme do 24 hodin</p>
                 </div>
