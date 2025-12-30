@@ -1,8 +1,12 @@
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAllSiteContent, getContent } from "@/hooks/useSiteContent";
 
-// Standard function component
 const ContactSection = () => {
+  const { data: content } = useAllSiteContent();
+
+  const title = getContent(content, "contact", "title", "content", "Kde nás najdete");
+
   return (
     <section id="kontakt" className="py-20 lg:py-28 bg-secondary/50">
       <div className="container mx-auto px-4">
@@ -10,7 +14,7 @@ const ContactSection = () => {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-accent font-semibold uppercase tracking-wider text-sm">Kontakt</span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display text-foreground mt-2 mb-4">
-            Kde nás najdete
+            {title}
           </h2>
           <p className="text-muted-foreground text-lg">
             Jsme snadno dostupní s dostatkem parkovacích míst. Přijeďte kdykoli v otevírací době.

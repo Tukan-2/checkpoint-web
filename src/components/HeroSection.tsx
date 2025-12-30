@@ -1,8 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Clock, Award } from "lucide-react";
 import heroImage from "@/assets/hero-inspection.jpg";
+import { useAllSiteContent, getContent } from "@/hooks/useSiteContent";
 
 const HeroSection = () => {
+  const { data: content } = useAllSiteContent();
+
+  const headline = getContent(content, "hero", "headline", "content", "Technická kontrola");
+  const headlineHighlight = getContent(content, "hero", "headline", "title", "bez čekání");
+  const subheadline = getContent(content, "hero", "subheadline", "content", 
+    "Profesionální stanice technické kontroly s moderním vybavením. Rychlá kontrola, férové jednání a transparentní ceny."
+  );
+
   return (
     <section className="relative min-h-screen flex items-center hero-bg overflow-hidden">
       {/* Background Image with Overlay */}
@@ -27,14 +36,13 @@ const HeroSection = () => {
 
             {/* Heading */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display text-primary-foreground mb-6 leading-tight animate-fade-up-delay-1">
-              Technická kontrola
-              <span className="block text-gradient">bez čekání</span>
+              {headline}
+              <span className="block text-gradient">{headlineHighlight}</span>
             </h1>
 
             {/* Description */}
             <p className="text-lg sm:text-xl text-primary-foreground/70 mb-8 max-w-xl mx-auto lg:mx-0 animate-fade-up-delay-2">
-              Profesionální stanice technické kontroly s moderním vybavením. 
-              Rychlá kontrola, férové jednání a transparentní ceny.
+              {subheadline}
             </p>
 
             {/* CTAs */}
