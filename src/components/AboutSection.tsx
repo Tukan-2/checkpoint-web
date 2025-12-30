@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
+import { useAllSiteContent, getContent } from "@/hooks/useSiteContent";
 
-const benefits = [
+const defaultBenefits = [
   "Bez objednání do 30 minut",
   "Moderní diagnostické vybavení",
   "Certifikovaní technici",
@@ -10,6 +11,13 @@ const benefits = [
 ];
 
 const AboutSection = () => {
+  const { data: content } = useAllSiteContent();
+
+  const title = getContent(content, "about", "title", "content", "Více než 15 let zkušeností");
+  const description = getContent(content, "about", "description", "content", 
+    "Jsme rodinná firma s dlouholetou tradicí v oblasti technických kontrol vozidel. Od roku 2008 jsme provedli více než 750 000 kontrol a získali si důvěru tisíců spokojených zákazníků."
+  );
+
   return (
     <section id="o-nas" className="py-20 lg:py-28 bg-secondary/50">
       <div className="container mx-auto px-4">
@@ -18,11 +26,10 @@ const AboutSection = () => {
           <div>
             <span className="text-accent font-semibold uppercase tracking-wider text-sm">O nás</span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display text-foreground mt-2 mb-6">
-              Více než 15 let zkušeností
+              {title}
             </h2>
             <p className="text-muted-foreground text-lg mb-6">
-              Jsme rodinná firma s dlouholetou tradicí v oblasti technických kontrol vozidel. 
-              Od roku 2008 jsme provedli více než 750 000 kontrol a získali si důvěru tisíců spokojených zákazníků.
+              {description}
             </p>
             <p className="text-muted-foreground text-lg mb-8">
               Investujeme do nejmodernějšího vybavení a pravidelně školíme náš tým, 
@@ -31,7 +38,7 @@ const AboutSection = () => {
 
             {/* Benefits List */}
             <div className="grid sm:grid-cols-2 gap-4">
-              {benefits.map((benefit) => (
+              {defaultBenefits.map((benefit) => (
                 <div key={benefit} className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                     <Check className="w-4 h-4 text-accent" />

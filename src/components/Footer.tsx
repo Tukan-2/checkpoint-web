@@ -1,7 +1,13 @@
 import { Phone, Mail, MapPin } from "lucide-react";
+import { useAllSiteContent, getContent } from "@/hooks/useSiteContent";
 
-// Standard function component
 const Footer = () => {
+  const { data: content } = useAllSiteContent();
+
+  const copyright = getContent(content, "footer", "copyright", "content", 
+    `© ${new Date().getFullYear()} STK AutoKontrol. Všechna práva vyhrazena.`
+  );
+
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12 lg:py-16">
@@ -85,7 +91,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/10 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-primary-foreground/50 text-sm">
-            © {new Date().getFullYear()} STK AutoKontrol. Všechna práva vyhrazena.
+            {copyright}
           </p>
           <div className="flex gap-6">
             <a href="#" className="text-primary-foreground/50 hover:text-primary-foreground text-sm transition-colors">
