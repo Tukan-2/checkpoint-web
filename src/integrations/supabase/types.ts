@@ -269,6 +269,48 @@ export type Database = {
         }
         Relationships: []
       }
+      services: {
+        Row: {
+          concurrent_slots: number | null
+          created_at: string | null
+          description: string | null
+          duration_minutes: number | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          order_index: number | null
+          price: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          concurrent_slots?: number | null
+          created_at?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          order_index?: number | null
+          price?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          concurrent_slots?: number | null
+          created_at?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          order_index?: number | null
+          price?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       site_content: {
         Row: {
           content: string | null
