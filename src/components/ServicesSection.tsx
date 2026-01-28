@@ -1,5 +1,7 @@
-import { Car, Gauge, FileCheck, Wrench, AlertTriangle, CheckCircle, LucideIcon } from "lucide-react";
+import { Car, Gauge, FileCheck, Wrench, AlertTriangle, CheckCircle, Clock, LucideIcon } from "lucide-react";
 import { useAllSiteContent, getContent } from "@/hooks/useSiteContent";
+import { useServices } from "@/hooks/useServices";
+import { useSiteSettings, isSettingEnabled } from "@/hooks/useSiteSettings";
 
 // Map icon names to components
 const iconMap: Record<string, LucideIcon> = {
@@ -11,42 +13,13 @@ const iconMap: Record<string, LucideIcon> = {
   CheckCircle,
 };
 
-// Fallback services for when CMS is empty
-const defaultServices = [
-  {
-    icon: Car,
-    title: "STK osobních vozidel",
-    description: "Kompletní technická kontrola osobních automobilů včetně emisí. Rychle a profesionálně.",
-  },
-  {
-    icon: Gauge,
-    title: "Měření emisí",
-    description: "Přesné měření emisí benzínových i naftových motorů s okamžitým výsledkem.",
-  },
-  {
-    icon: FileCheck,
-    title: "Evidenční kontrola",
-    description: "Kontrola identifikačních údajů vozidla pro přepis nebo změnu v registru.",
-  },
-  {
-    icon: Wrench,
-    title: "STK nákladních vozidel",
-    description: "Technická kontrola nákladních vozidel, přívěsů a návěsů do 3,5 tuny.",
-  },
-  {
-    icon: AlertTriangle,
-    title: "ADR kontrola",
-    description: "Speciální kontrola vozidel pro přepravu nebezpečných látek.",
-  },
-  {
-    icon: CheckCircle,
-    title: "Opakovaná kontrola",
-    description: "Rychlá opakovaná kontrola po odstranění závad do 30 dnů.",
-  },
-];
-
 const ServicesSection = () => {
-  const { data: content, isLoading } = useAllSiteContent();
+  const { data: content } = useAllSiteContent();
+  const { data: services, isLoading: servicesLoading } = useServices();
+  const { data: settings } = useSiteSettings();
+
+  // Check if prices should be visible
+  const showPrices = isSettingEnabled(settings, "prices_visible", false);
 
   // Get section header from CMS
   const sectionLabel = getContent(content, "services", "section_label", "content", "Naše služby");
@@ -54,25 +27,19 @@ const ServicesSection = () => {
   const sectionDescription = getContent(content, "services", "section_description", "content", 
     "Nabízíme širokou škálu služeb pro všechny typy vozidel. Vše na jednom místě s profesionálním přístupem.");
 
-  // Get services from CMS or use defaults
-  const cmsServices = content?.services 
-    ? Object.entries(content.services)
-        .filter(([key]) => key.startsWith("service_") && key.endsWith("_title"))
-        .map(([key]) => {
-          const serviceKey = key.replace("_title", "");
-          const iconName = content.services[`${serviceKey}_icon`]?.content || "Car";
-          return {
-            icon: iconMap[iconName] || Car,
-            title: content.services[`${serviceKey}_title`]?.title || "",
-            description: content.services[`${serviceKey}_description`]?.content || "",
-            order: content.services[`${serviceKey}_title`]?.order_index || 0,
-          };
-        })
-        .filter(s => s.title)
-        .sort((a, b) => a.order - b.order)
-    : [];
+  const formatDuration = (minutes: number | null) => {
+    if (!minutes) return null;
+    if (minutes < 60) return `${minutes} min`;
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    if (remainingMinutes === 0) return `${hours} hod`;
+    return `${hours} hod ${remainingMinutes} min`;
+  };
 
-  const services = cmsServices.length > 0 ? cmsServices : defaultServices;
+  const formatPrice = (price: number | null) => {
+    if (!price) return null;
+    return `${price.toLocaleString('cs-CZ')} Kč`;
+  };
 
   return (
     <section id="sluzby" className="py-20 lg:py-28 bg-background">
@@ -89,21 +56,43 @@ const ServicesSection = () => {
         </div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, index) => (
-            <div
-              key={service.title}
-              className="group bg-card rounded-2xl p-6 lg:p-8 card-elevated border border-border hover:border-accent/30 transition-all duration-300"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent/20 transition-colors">
-                <service.icon className="w-7 h-7 text-accent" />
-              </div>
-              <h3 className="text-xl font-display text-foreground mb-3">{service.title}</h3>
-              <p className="text-muted-foreground">{service.description}</p>
-            </div>
-          ))}
-        </div>
+        {servicesLoading ? (
+          <div className="text-center py-12 text-muted-foreground">Načítání služeb...</div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services?.map((service, index) => {
+              const IconComponent = iconMap[service.icon || "Car"] || Car;
+              return (
+                <div
+                  key={service.id}
+                  className="group bg-card rounded-2xl p-6 lg:p-8 card-elevated border border-border hover:border-accent/30 transition-all duration-300"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent/20 transition-colors">
+                    <IconComponent className="w-7 h-7 text-accent" />
+                  </div>
+                  <h3 className="text-xl font-display text-foreground mb-3">{service.name}</h3>
+                  <p className="text-muted-foreground mb-4">{service.description}</p>
+                  
+                  {/* Duration and Price */}
+                  <div className="flex flex-wrap items-center gap-3 mt-auto pt-4 border-t border-border/50">
+                    {service.duration_minutes && (
+                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                        <Clock className="w-4 h-4" />
+                        <span>{formatDuration(service.duration_minutes)}</span>
+                      </div>
+                    )}
+                    {showPrices && service.price && (
+                      <div className="ml-auto text-lg font-semibold text-accent">
+                        {formatPrice(service.price)}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );
