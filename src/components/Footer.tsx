@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { useAllSiteContent, getContent } from "@/hooks/useSiteContent";
 import { useSiteSettings, getSetting } from "@/hooks/useSiteSettings";
 
@@ -9,8 +9,8 @@ const Footer = () => {
   const copyright = getContent(content, "footer", "copyright", "content", 
     `© ${new Date().getFullYear()} STK AutoKontrol. Všechna práva vyhrazena.`
   );
-  const phone = getSetting(settings, "contact_phone", "+420 123 456 789");
   const email = getSetting(settings, "contact_email", "info@stk-autokontrol.cz");
+  const address = getSetting(settings, "contact_address", "Průmyslová 1234/56, 110 00 Praha 1");
 
   return (
     <footer className="bg-primary text-primary-foreground">
@@ -74,13 +74,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center gap-3">
                 <MapPin className="w-4 h-4 text-accent flex-shrink-0" />
-                <span className="text-primary-foreground/70 text-sm">Průmyslová 1234/56, Praha</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-accent flex-shrink-0" />
-                <a href={`tel:${phone.replace(/\s/g, "")}`} className="text-primary-foreground/70 hover:text-primary-foreground text-sm">
-                  {phone}
-                </a>
+                <span className="text-primary-foreground/70 text-sm">{address}</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-accent flex-shrink-0" />

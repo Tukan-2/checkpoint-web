@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Phone, Navigation } from "lucide-react";
+import { Menu, X, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useBranches } from "@/hooks/useBranches";
 import { toast } from "sonner";
@@ -235,10 +235,6 @@ const Navbar = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="tel:+420123456789" className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground">
-              <Phone className="w-4 h-4" />
-              <span className="font-semibold">+420 123 456 789</span>
-            </a>
             <Button variant="accent" size="default" asChild>
               <Link to="/pobocky">Objednat se</Link>
             </Button>
@@ -258,10 +254,6 @@ const Navbar = () => {
           <div className="md:hidden py-4 border-t border-primary-foreground/10">
             {navLinks.map(renderMobileNavLink)}
             <div className="pt-4 mt-4 border-t border-primary-foreground/10">
-              <a href="tel:+420123456789" className="flex items-center gap-2 text-primary-foreground/80 mb-4">
-                <Phone className="w-4 h-4" />
-                <span className="font-semibold">+420 123 456 789</span>
-              </a>
               <Button variant="accent" className="w-full" asChild>
                 <Link to="/pobocky" onClick={() => setIsOpen(false)}>Objednat se</Link>
               </Button>
