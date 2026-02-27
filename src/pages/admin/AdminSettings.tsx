@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Settings, Eye, Phone, Mail } from "lucide-react";
+import { Save, Settings, Eye, Mail, MapPin } from "lucide-react";
 
 interface SiteSetting {
   id: string;
@@ -15,6 +16,8 @@ interface SiteSetting {
   value: string | null;
   description: string | null;
 }
+
+const MANAGED_KEYS = ["prices_visible", "contact_email", "contact_address", "contact_branch_note", "contact_phone"];
 
 const AdminSettings = () => {
   const [settings, setSettings] = useState<Record<string, string>>({});
@@ -118,49 +121,53 @@ const AdminSettings = () => {
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="p-2 bg-accent rounded-lg">
-                <Phone className="w-5 h-5 text-accent-foreground" />
+                <MapPin className="w-5 h-5 text-accent-foreground" />
               </div>
               <div>
                 <CardTitle>Kontaktní údaje</CardTitle>
-                <CardDescription>Hlavní kontaktní informace zobrazené na webu</CardDescription>
+                <CardDescription>Údaje zobrazené v kontaktní sekci na webu</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label>Kontaktní telefon</Label>
-                <div className="flex gap-2">
-                  <Input
-                    value={settings.contact_phone || ""}
-                    onChange={(e) => setSettings({ ...settings, contact_phone: e.target.value })}
-                    placeholder="+420 123 456 789"
-                  />
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleSave("contact_phone")}
-                  >
-                    <Save className="w-4 h-4" />
-                  </Button>
-                </div>
+            <div className="space-y-2">
+              <Label>Kontaktní email</Label>
+              <div className="flex gap-2">
+                <Input
+                  value={settings.contact_email || ""}
+                  onChange={(e) => setSettings({ ...settings, contact_email: e.target.value })}
+                  placeholder="info@example.cz"
+                />
+                <Button variant="outline" size="icon" onClick={() => handleSave("contact_email")}>
+                  <Save className="w-4 h-4" />
+                </Button>
               </div>
-              <div className="space-y-2">
-                <Label>Kontaktní email</Label>
-                <div className="flex gap-2">
-                  <Input
-                    value={settings.contact_email || ""}
-                    onChange={(e) => setSettings({ ...settings, contact_email: e.target.value })}
-                    placeholder="info@example.cz"
-                  />
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleSave("contact_email")}
-                  >
-                    <Save className="w-4 h-4" />
-                  </Button>
-                </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Sídlo firmy</Label>
+              <div className="flex gap-2">
+                <Input
+                  value={settings.contact_address || ""}
+                  onChange={(e) => setSettings({ ...settings, contact_address: e.target.value })}
+                  placeholder="Ulice 123, 110 00 Praha"
+                />
+                <Button variant="outline" size="icon" onClick={() => handleSave("contact_address")}>
+                  <Save className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Poznámka o kontaktech poboček</Label>
+              <div className="flex gap-2">
+                <Textarea
+                  value={settings.contact_branch_note || ""}
+                  onChange={(e) => setSettings({ ...settings, contact_branch_note: e.target.value })}
+                  placeholder="Kontakty na jednotlivé pobočky najdete..."
+                  rows={2}
+                />
+                <Button variant="outline" size="icon" className="flex-shrink-0" onClick={() => handleSave("contact_branch_note")}>
+                  <Save className="w-4 h-4" />
+                </Button>
               </div>
             </div>
           </CardContent>
@@ -182,7 +189,7 @@ const AdminSettings = () => {
           <CardContent>
             <div className="space-y-4">
               {siteSettings
-                ?.filter((s) => !["prices_visible", "contact_phone", "contact_email"].includes(s.key))
+                ?.filter((s) => !MANAGED_KEYS.includes(s.key))
                 .map((setting) => (
                   <div key={setting.id} className="space-y-2">
                     <Label>{setting.description || setting.key}</Label>
@@ -191,17 +198,13 @@ const AdminSettings = () => {
                         value={settings[setting.key] || ""}
                         onChange={(e) => setSettings({ ...settings, [setting.key]: e.target.value })}
                       />
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => handleSave(setting.key)}
-                      >
+                      <Button variant="outline" size="icon" onClick={() => handleSave(setting.key)}>
                         <Save className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
                 ))}
-              {siteSettings?.filter((s) => !["prices_visible", "contact_phone", "contact_email"].includes(s.key)).length === 0 && (
+              {siteSettings?.filter((s) => !MANAGED_KEYS.includes(s.key)).length === 0 && (
                 <p className="text-muted-foreground text-center py-4">Žádná další nastavení</p>
               )}
             </div>
